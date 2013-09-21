@@ -24,6 +24,5 @@ WCBNPlayer/build
 local.properties
 
 # Misc
-.idea/workspace.xml
-.idea/tasks.xml
+.idea/
 .gradle/
