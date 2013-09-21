@@ -97,6 +97,8 @@ public class FullscreenActivity extends Activity {
             else if(AccelerometerService.INTENT_CRASHED.equals(intent.getAction())) {
                 Log.d("FullscreenActivity", "Detected a crash!!!");
                 if(!recording) {
+                    Intent i = new Intent("com.google.glass.action.MESSAGE");
+                    i.putExtra("MESSAGE", "EMERGENCY!!!");
                     recording = true;
                     startRecording();
                 }

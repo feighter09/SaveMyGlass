@@ -37,11 +37,17 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:theme="@style/FullscreenTheme" >
+
+            <intent-filter>
+                                <action android:name="com.google.android.glass.action.VOICE_TRIGGER" />
+                                <category android:name="android.intent.category.DEFAULT" />
+                            </intent-filter>
+                        <meta-data android:name="com.google.android.glass.voice_trigger" android:resource="@string/voice_menu_trigger" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.HOME" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

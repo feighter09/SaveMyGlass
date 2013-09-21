@@ -44,7 +44,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         CamcorderProfile cpHigh = CamcorderProfile
                 .get(CamcorderProfile.QUALITY_HIGH);
         recorder.setProfile(cpHigh);
-        recorder.setOutputFile("/sdcard/video_accident_" + System.currentTimeMillis() + "+.mp4");
+        recorder.setOutputFile("/sdcard/video_accident_" + System.currentTimeMillis() + ".mp4");
         recorder.setMaxDuration(120000); // 50 seconds
         recorder.setMaxFileSize(100000000); // Approximately 5 megabytes
         recorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
