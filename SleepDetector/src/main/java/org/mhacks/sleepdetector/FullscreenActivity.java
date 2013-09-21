@@ -56,6 +56,8 @@ public class FullscreenActivity extends Activity {
         Log.d("SleepDetector", "Start");
 
         startService(new Intent(this, ProxService.class));
+        startService(new Intent(this, AccelerometerService.class));
+
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);

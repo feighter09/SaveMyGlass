@@ -7,10 +7,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class ProxService extends Service {
 
@@ -32,7 +29,7 @@ public class ProxService extends Service {
         protected String doInBackground(Void... voids) {
             String val = Utils.readFile(SENSOR_PATH);
 
-            
+
 
             Log.d("SleepDetector", "Reading value...");
             Log.d("SleepDetector", val);
