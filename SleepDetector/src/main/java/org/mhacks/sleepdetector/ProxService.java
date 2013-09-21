@@ -11,10 +11,14 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Queue;
+import java.util.Vector;
 
 public class ProxService extends Service {
 
     private float runningAverage;
+    private Queue<Integer> last20Secs;
 
     private Handler refreshHandler = new Handler();
     private Runnable refreshRunnable = new Runnable() {
@@ -32,10 +36,22 @@ public class ProxService extends Service {
         protected String doInBackground(Void... voids) {
             String val = Utils.readFile(SENSOR_PATH);
 
-            
+            while (last20Secs.size() < 400) {
+                last20Secs.add(Integer.parseInt(val));
+                try {
+                    wait(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                val = Utils.readFile(SENSOR_PATH);
+            }
 
             Log.d("SleepDetector", "Reading value...");
             Log.d("SleepDetector", val);
+
+            decideWhatToDo(Integer.parseInt(val));
+
             return Utils.readFile(SENSOR_PATH);
         }
 
@@ -43,6 +59,19 @@ public class ProxService extends Service {
         protected void onPostExecute(String result) {
             refreshHandler.postDelayed(refreshRunnable, 50);
 
+        }
+
+        protected void decideWhatToDo(int val) {
+            int avg = queueAvg();
+
+        }
+
+        protected int queueAvg() {
+            int sum = 0;
+            for (int i : last20Secs)
+                sum += i;
+
+            return sum / last20Secs.size();
         }
     }
 
