@@ -9,6 +9,10 @@ import android.util.Log;
  * Created by mike on 9/21/13.
  */
 public class DonReceiver extends BroadcastReceiver {
+
+    public static final String INTENT_DON = "org.mhacks.sleepdetector.INTENT_DON";
+    public static final String INTENT_UNDON = "org.mhacks.sleepdetector.INTENT_UNDON";
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d("DonReceiver", "Got don event!");
