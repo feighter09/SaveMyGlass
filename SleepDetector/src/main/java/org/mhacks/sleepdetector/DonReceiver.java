@@ -19,6 +19,5 @@ public class DonReceiver extends BroadcastReceiver {
             context.stopService(new Intent(context, ProxService.class));
             context.stopService(new Intent(context, AccelerometerService.class));
         }
-
     }
 }
