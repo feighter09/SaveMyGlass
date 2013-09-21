@@ -58,7 +58,15 @@ public class FullscreenActivity extends Activity {
     }
 
     private void startRecording() {
-        startActivity(new Intent(this, RecordActivity.class));
+        startActivityForResult(new Intent(this, RecordActivity.class), 5);
+    }
+
+    private boolean recording = false;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 5)
+            recording = false;
     }
 
     private class EventReceiver extends BroadcastReceiver {
@@ -75,7 +83,10 @@ public class FullscreenActivity extends Activity {
             }
             else if(AccelerometerService.INTENT_CRASHED.equals(intent.getAction())) {
                 Log.d("FullscreenActivity", "Detected a crash!!!");
-                startRecording();
+                if(!recording) {
+                    recording = true;
+                    startRecording();
+                }
             }
         }
     }

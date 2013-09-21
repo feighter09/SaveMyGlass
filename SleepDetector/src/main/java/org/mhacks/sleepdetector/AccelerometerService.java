@@ -41,7 +41,6 @@ public class AccelerometerService extends Service implements SensorEventListener
     }
 
     private int mCt;
-    boolean crashed = false;
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
@@ -63,7 +62,6 @@ public class AccelerometerService extends Service implements SensorEventListener
         }
         }
         else if(sensorEvent.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-            if(!crashed) {
             float absAccelerationG = 0;
             for(float f : sensorEvent.values) {
                 absAccelerationG += Math.pow(f, 2);
@@ -72,9 +70,7 @@ public class AccelerometerService extends Service implements SensorEventListener
             absAccelerationG /= 9.81;
             Log.d("AccelerometerService", ""+absAccelerationG);
             if(absAccelerationG > CRASH_GS) {
-                crashed = true;
                 sendBroadcast(new Intent(INTENT_CRASHED));
-            }
             }
         }
     }
