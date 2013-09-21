@@ -1,21 +1,42 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:background="#000000"
+    android:id="@+id/backgroundLayout"
     tools:context=".FullscreenActivity">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
-
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
-
     <TextView
+        android:textColor="#FFFFFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="60"
         android:id="@+id/speedTextView"
-        android:layout_gravity="right|bottom" />
-</FrameLayout>
+        android:layout_gravity="right|bottom"
+        android:layout_centerInParent="true"
+        android:textSize="90dp"
+        />
+
+    <TextView
+        android:textColor="#FFFFFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="mph"
+        android:id="@+id/speedUnitTextView"
+        android:layout_gravity="right|bottom"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/speedTextView"
+        android:textSize="30dp"
+        />
+
+    <TextView
+        android:textColor="#FFFFFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="40°"
+        android:id="@+id/tempTextView"
+        android:layout_gravity="right|bottom"
+        android:layout_alignParentBottom="true"
+        android:textSize="40dp"
+        />
+</RelativeLayout>

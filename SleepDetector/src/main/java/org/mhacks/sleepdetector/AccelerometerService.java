@@ -16,6 +16,7 @@ public class AccelerometerService extends Service implements SensorEventListener
 
     public static final String INTENT_WAKE_UP = "org.mhacks.sleepdetector.INTENT_WAKE_UP";
     public static final String INTENT_WOKE = "org.mhacks.sleepdetector.INTENT_WOKE";
+    public static final String INTENT_CRASHED = "org.mhacks.sleepdetector.INTENT_CRASHED";
 
     private SensorManager mSensorManager;
     private  Sensor mRotation, mAccel;
@@ -30,8 +31,8 @@ public class AccelerometerService extends Service implements SensorEventListener
         mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         mAccel = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         mSensorManager.registerListener(this, mRotation, SensorManager.SENSOR_DELAY_FASTEST);
+        mSensorManager.registerListener(this, mAccel, SensorManager.SENSOR_DELAY_FASTEST);
     }
-
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -42,7 +43,7 @@ public class AccelerometerService extends Service implements SensorEventListener
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        Log.d("AccelerometerService", sensorEvent.values[0]+"");
+        if(sensorEvent.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
         if(sensorEvent.values[0] > HIGH_THRESH) {
             mCt++;
         }
@@ -57,6 +58,17 @@ public class AccelerometerService extends Service implements SensorEventListener
         }
         if(mCt > 250) {
             sendBroadcast(new Intent(INTENT_WAKE_UP));
+        }
+        }
+        else if(sensorEvent.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
+            float absAccelerationG = 0;
+            int div = 0;
+            for(float f : sensorEvent.values) {
+                absAccelerationG += f;
+                div++;
+            }
+            absAccelerationG /= div;
+            Log.d("AccelerometerService", ""+absAccelerationG);
         }
     }
 
