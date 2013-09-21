@@ -13,7 +13,7 @@ public class AccelerometerService extends Service implements SensorEventListener
 
     public static final float LOW_THRESH = 0.5f;
     public static final float HIGH_THRESH = 0.8f;
-    public static final float CRASH_GS = 5f;
+    public static final float CRASH_GS = 1.5f;
 
     public static final String INTENT_WAKE_UP = "org.mhacks.sleepdetector.INTENT_WAKE_UP";
     public static final String INTENT_WOKE = "org.mhacks.sleepdetector.INTENT_WOKE";
@@ -41,6 +41,7 @@ public class AccelerometerService extends Service implements SensorEventListener
     }
 
     private int mCt;
+    boolean crashed = false;
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
@@ -62,6 +63,7 @@ public class AccelerometerService extends Service implements SensorEventListener
         }
         }
         else if(sensorEvent.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
+            if(!crashed) {
             float absAccelerationG = 0;
             for(float f : sensorEvent.values) {
                 absAccelerationG += Math.pow(f, 2);
@@ -70,7 +72,9 @@ public class AccelerometerService extends Service implements SensorEventListener
             absAccelerationG /= 9.81;
             Log.d("AccelerometerService", ""+absAccelerationG);
             if(absAccelerationG > CRASH_GS) {
+                crashed = true;
                 sendBroadcast(new Intent(INTENT_CRASHED));
+            }
             }
         }
     }

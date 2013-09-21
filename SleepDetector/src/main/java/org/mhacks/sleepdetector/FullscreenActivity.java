@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -51,6 +52,10 @@ public class FullscreenActivity extends Activity {
         registerReceiver(new EventReceiver(), filter);
     }
 
+    private void startRecording() {
+        startActivity(new Intent(this, RecordActivity.class));
+    }
+
     private class EventReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -65,17 +70,9 @@ public class FullscreenActivity extends Activity {
             }
             else if(AccelerometerService.INTENT_CRASHED.equals(intent.getAction())) {
                 Log.d("FullscreenActivity", "Detected a crash!!!");
-
-
+                startRecording();
             }
-
-
         }
-    }
-
-    private void dispatchTakeVideoIntent() {
-        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        startActivityForResult(takeVideoIntent, 3);
     }
 
 
