@@ -6,9 +6,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.MediaPlayer;
 import android.os.IBinder;
-import android.provider.MediaStore;
 import android.util.Log;
 
 public class AccelerometerService extends Service implements SensorEventListener {
