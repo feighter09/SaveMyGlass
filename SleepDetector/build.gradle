@@ -6,6 +6,11 @@ buildscript {
         classpath 'com.android.tools.build:gradle:0.5.+'
     }
 }
+
+dependencies {
+    compile fileTree(dir: "libs", include: "*.jar")
+}
+
 apply plugin: 'android'
 
 repositories {

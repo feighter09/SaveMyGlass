@@ -6,7 +6,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.IBinder;
+import android.provider.MediaStore;
 import android.util.Log;
 
 public class AccelerometerService extends Service implements SensorEventListener {
@@ -15,7 +17,7 @@ public class AccelerometerService extends Service implements SensorEventListener
     public static final float HIGH_THRESH = 0.8f;
 
     private SensorManager mSensorManager;
-    private  Sensor mAccelerometer;
+    private  Sensor mRotation, mAccel;
 
     public AccelerometerService() {
 
@@ -24,8 +26,9 @@ public class AccelerometerService extends Service implements SensorEventListener
     @Override
     public void onCreate() {
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
+        mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        mAccel = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        mSensorManager.registerListener(this, mRotation, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
 

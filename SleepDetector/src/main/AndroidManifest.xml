@@ -4,6 +4,8 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <uses-feature android:name="android.hardware.camera" />
+
     <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="17" />
@@ -13,6 +15,12 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <receiver android:name=".DonReceiver">
+            <intent-filter>
+                <action android:name="com.google.glass.action.DON_STATE" />
+            </intent-filter>
+        </receiver>
 
         <service android:name=".ProxService" />
         <service android:name=".AccelerometerService" />
