@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/SleepDetector/SleepDetector.iml" filepath="$PROJECT_DIR$/SleepDetector/SleepDetector.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SleepDetectorProject.iml" filepath="$PROJECT_DIR$/SleepDetectorProject.iml" />
+    </modules>
+  </component>
+</project>
+
