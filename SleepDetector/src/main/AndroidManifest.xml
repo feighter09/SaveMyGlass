@@ -15,6 +15,7 @@
         android:theme="@style/AppTheme" >
 
         <service android:name=".ProxService" />
+        <service android:name=".AccelerometerService" />
 
         <activity
             android:name="org.mhacks.sleepdetector.FullscreenActivity"

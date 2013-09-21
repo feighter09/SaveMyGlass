@@ -7,13 +7,15 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.io.BufferedInputStream;
 import java.io.File;
+<<<<<<< HEAD
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Queue;
 import java.util.Vector;
+=======
+>>>>>>> 2e2bdbbdd4760ee0450d46a45a6abdba77edd8f1
 
 public class ProxService extends Service {
 
