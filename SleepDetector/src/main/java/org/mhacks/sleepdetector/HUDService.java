@@ -10,11 +10,14 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tomtom.lbs.sdk.geolocation.ReverseGeocodeData;
 import com.tomtom.lbs.sdk.geolocation.ReverseGeocodeListener;
+import com.tomtom.lbs.sdk.geolocation.ReverseGeocodeOptionalParameters;
 import com.tomtom.lbs.sdk.geolocation.ReverseGeocoder;
 import com.tomtom.lbs.sdk.util.Coordinates;
+import com.tomtom.lbs.sdk.util.SDKContext;
 
 import java.util.Vector;
 
@@ -26,6 +29,7 @@ public class HUDService extends Service {
     MyLocationListener mlocListener = new MyLocationListener();
     LocationManager mlocManager;
     TextView speedLimitView;
+    Double curSpeed = 0.0;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -36,13 +40,14 @@ public class HUDService extends Service {
 
         @Override
         public void onLocationChanged(Location loc) {
-            Log.e("SleepDetector", "come on");
             String text = "My current location is: " + "Latitude = "
                     + loc.getLatitude() + "Longitude = " + loc.getLongitude();
 
             Log.d("SleepDetector", "Getting Location...");
             Log.d("SleepDetector", text);
 
+            curSpeed = loc.getSpeed() * 2.23694;
+            Log.d("SleepDetector", "CurSpeed: " + Double.toString(curSpeed));
             updateSpeedLimit(new Coordinates(loc.getLatitude(), loc.getLongitude()));
         }
         @Override
@@ -64,10 +69,8 @@ public class HUDService extends Service {
                 Log.d("SleepDetector", Double.toString((double)result.averageSpeedKph * 0.621371));
 
                 speedLimitView.setText(Double.toString((double) result.maxSpeedKph * 0.621371));
-                getLocation();
-            } else {
-                Log.e("SleepDetector", "this happened");
             }
+            getLocation();
         }
     }
 
@@ -76,21 +79,23 @@ public class HUDService extends Service {
     }
 
     private void updateSpeedLimit(Coordinates coords) {
-        Log.e("SleepDetector", "come onnn");
-        Log.d("SleepDetector", Double.toString(coords.getLat()));
         MyGeocodeListener listener = new MyGeocodeListener();
-        ReverseGeocoder.reverseGeocode(coords, null, listener, null);
+        ReverseGeocodeOptionalParameters params = new ReverseGeocodeOptionalParameters();
+        params.type = ReverseGeocodeOptionalParameters.REVERSE_TYPE_ALL;
+        ReverseGeocoder.reverseGeocode(coords, params, listener, null);
     }
 
     public void getLocation() {
-        Log.e("SleepDetector", "WE'RE HERE!");
         mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
+        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mlocListener);
     }
 
     @Override
     public void onCreate() {
         mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        Log.e("SleepDetector", "WE'RE GERE!");
+        SDKContext.setDeveloperKey("864stzx5n9senu3tbgb7ttqq");
         getLocation();
     }
+
+
 }
