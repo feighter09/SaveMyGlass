@@ -1,7 +1,5 @@
 package org.mhacks.sleepdetector;
 
-import org.mhacks.sleepdetector.util.SystemUiHider;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -13,13 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class FullscreenActivity extends Activity {
-    private static final boolean AUTO_HIDE = true;
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
-    private static final boolean TOGGLE_ON_CLICK = true;
-    private static final int HIDER_FLAGS = SystemUiHider.FLAG_HIDE_NAVIGATION;
-
-    private SystemUiHider mSystemUiHider;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
