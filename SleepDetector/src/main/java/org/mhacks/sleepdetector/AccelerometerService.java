@@ -14,6 +14,9 @@ public class AccelerometerService extends Service implements SensorEventListener
     public static final float LOW_THRESH = 0.5f;
     public static final float HIGH_THRESH = 0.8f;
 
+    public static final String INTENT_WAKE_UP = "org.mhacks.sleepdetector.INTENT_WAKE_UP";
+    public static final String INTENT_WOKE = "org.mhacks.sleepdetector.INTENT_WOKE";
+
     private SensorManager mSensorManager;
     private  Sensor mRotation, mAccel;
 
@@ -47,15 +50,16 @@ public class AccelerometerService extends Service implements SensorEventListener
             mCt++;
         }
         else {
+            if(mCt > 250) {
+                sendBroadcast(new Intent(INTENT_WOKE));
+            }
             mCt = 0;
         }
         if(mCt > 250) {
-            Log.d("AccelerometerService", "WAKE UP! WAKE UP!");
+            sendBroadcast(new Intent(INTENT_WAKE_UP));
         }
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
-    }
+    public void onAccuracyChanged(Sensor sensor, int i) {}
 }
