@@ -61,13 +61,7 @@ public class FullscreenActivity extends Activity {
                 "Roboto-Light.ttf");
 
         TextView tv = (TextView)findViewById(R.id.speedTextView);
-
         tv.setTypeface(robotoLight);
-
-//        HUDService HUD = new HUDService();
-//        HUD.setSpeedLimitView(tv);
-//        HUD.getLocation();
-//        HUD.onCreate();
 
         mBackgroundLayout = (RelativeLayout) findViewById(R.id.backgroundLayout);
 
@@ -108,13 +102,11 @@ public class FullscreenActivity extends Activity {
             }
             //
             else if(AccelerometerService.INTENT_WOKE.equals(intent.getAction())) {
-                Log.d("FullscreenActivity", "You woke…");
                 mBackgroundLayout.setBackgroundColor(getResources().getColor(R.color.black));
                     player.pause();
 
             }
             else if(AccelerometerService.INTENT_CRASHED.equals(intent.getAction())) {
-                Log.d("FullscreenActivity", "Detected a crash!!!");
                 if(!recording) {
                     Intent i = new Intent("com.google.glass.action.MESSAGE");
                     i.putExtra("MESSAGE", "EMERGENCY!!!");
@@ -123,8 +115,10 @@ public class FullscreenActivity extends Activity {
                 }
             }
             else if(HUDService.INTENT_SPEED_CHANGED.equals(intent.getAction())) {
-                TextView tv = (TextView)findViewById(R.id.speedTextView);
-                tv.setText(Integer.toString(intent.getIntExtra("Speed", 0)));
+                TextView speedView = (TextView)findViewById(R.id.speedTextView);
+                speedView.setText(Integer.toString((int)intent.getFloatExtra("Speed", 0)));
+                TextView speedLimitTextView = (TextView)findViewById(R.id.speedLimitTextView);
+                speedLimitTextView.setText(Integer.toString(intent.getIntExtra("SpeedLimit", 20)));
             }
         }
     }
