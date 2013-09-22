@@ -122,6 +122,7 @@ public class FullscreenActivity extends Activity {
             int height = findViewById(R.id.gradientCoverLayout).getLayoutParams().height;
             RelativeLayout.LayoutParams newParams = new RelativeLayout.LayoutParams(rand, height);
             newParams.addRule(RelativeLayout.ALIGN_RIGHT, R.id.gradientLayout);
+            newParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
             findViewById(R.id.gradientCoverLayout).setLayoutParams(newParams);
 //            TextView speedTextView = (TextView)findViewById(R.id.speedTextView);
 //            speedTextView.setText(Integer.toString((600 - rand) / 8));

@@ -15,7 +15,7 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="100dp">
+        android:layout_height="140dp">
 
         <TextView
             android:layout_width="fill_parent"
@@ -23,19 +23,21 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center"
             android:textSize="30sp"
-            android:text="Calling 911... \n press anything to cancel."
+            android:layout_centerVertical="true"
+            android:text="Calling 911... \n Swipe down to cancel."
             android:id="@+id/textView911"
             android:layout_gravity="right|center_vertical" />
 
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:id="@+id/progressBar"
+            android:layout_below="@+id/textView911"
+            />
+
     </RelativeLayout>
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:id="@+id/progressBar"
-        android:layout_below="@id/textView911"
-        />
 
 
 </LinearLayout>
