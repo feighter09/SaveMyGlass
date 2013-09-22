@@ -17,11 +17,11 @@ public class DonReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d("DonReceiver", "Got don event!");
         if(intent.getBooleanExtra("is_donned", false)) {
-            context.startActivity(new Intent(context, FullscreenActivity.class));
+            //context.startActivity(new Intent(context, FullscreenActivity.class));
         }
         else {
-            context.stopService(new Intent(context, ProxService.class));
-            context.stopService(new Intent(context, AccelerometerService.class));
+            //context.stopService(new Intent(context, ProxService.class));
+            //context.stopService(new Intent(context, AccelerometerService.class));
         }
     }
 }

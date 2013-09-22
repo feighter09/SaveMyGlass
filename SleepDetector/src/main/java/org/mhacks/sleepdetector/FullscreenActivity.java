@@ -27,6 +27,19 @@ public class FullscreenActivity extends Activity {
 
 
     MediaPlayer player;
+    private boolean canBeep = true;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        canBeep = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        canBeep = true;
+    }
 
 
     @Override
@@ -82,17 +95,15 @@ public class FullscreenActivity extends Activity {
             // We need to wake the user up
             if(AccelerometerService.INTENT_WAKE_UP.equals(intent.getAction())) {
                 mBackgroundLayout.setBackgroundColor(getResources().getColor(R.color.red));
-                if(!player.isPlaying()) {
                     player.start();
-                }
+
             }
             //
             else if(AccelerometerService.INTENT_WOKE.equals(intent.getAction())) {
                 Log.d("FullscreenActivity", "You woke…");
                 mBackgroundLayout.setBackgroundColor(getResources().getColor(R.color.black));
-                if(player.isPlaying()) {
                     player.pause();
-                }
+
             }
             else if(AccelerometerService.INTENT_CRASHED.equals(intent.getAction())) {
                 Log.d("FullscreenActivity", "Detected a crash!!!");

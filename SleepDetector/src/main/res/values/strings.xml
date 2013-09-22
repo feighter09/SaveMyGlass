@@ -4,6 +4,6 @@
     <string name="app_name">SleepDetector</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="voice_menu_trigger">lets drive</string>
+    <string name="voice_menu_trigger">let\'s drive</string>
 
 </resources>
