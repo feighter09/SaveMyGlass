@@ -52,8 +52,6 @@ public class AccelerometerService extends Service implements SensorEventListener
             float y=sensorEvent.values[1];
             float z=sensorEvent.values[2];
 
-           // Log.d("Accelerometer", x + " " + y + " "+z);
-
             if(Math.abs(z) > 2.5) {
                 mCt++;
             }
@@ -69,12 +67,7 @@ public class AccelerometerService extends Service implements SensorEventListener
         }
 
         if(sensorEvent.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
-
             SensorManager.getRotationMatrixFromVector(mRotationMatrix,sensorEvent.values);
-
-//            Log.d("AccelerometerService", mRotationMatrix[0]+" "+mRotationMatrix[1]+" "+mRotationMatrix[2]);
-
-
         }
         else if(sensorEvent.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
             float absAccelerationG = 0;

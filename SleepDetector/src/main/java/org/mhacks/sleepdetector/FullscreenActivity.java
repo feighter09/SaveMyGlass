@@ -27,7 +27,6 @@ public class FullscreenActivity extends Activity {
 
     private RelativeLayout mBackgroundLayout;
 
-
     MediaPlayer player;
     private boolean canBeep = true;
 
@@ -42,7 +41,6 @@ public class FullscreenActivity extends Activity {
         super.onResume();
         canBeep = true;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,8 +128,4 @@ public class FullscreenActivity extends Activity {
             speedTextView.setText(Integer.toString((600 - rand) / 8));
         }
     }
-
-
-
-
 }

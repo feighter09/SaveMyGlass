@@ -1,9 +1,11 @@
 package org.mhacks.sleepdetector;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -11,6 +13,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 
 import java.io.IOException;
 
@@ -35,6 +38,25 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
         holder = cameraView.getHolder();
         holder.addCallback(this);
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
+        new Thread() {
+            public void run() {
+                ProgressBar bar = (ProgressBar)findViewById(R.id.progressBar);
+                for (int i = 0; i <= 100; i++){
+                    bar.setProgress(i);
+                    try {
+                        sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                String num = "tel:18001234567";
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse(num));
+                startActivity(intent);
+            }
+        }.start();
     }
 
     private void initRecorder() {

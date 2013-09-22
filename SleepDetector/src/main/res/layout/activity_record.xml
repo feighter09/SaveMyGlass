@@ -8,9 +8,34 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:id="@+id/CameraView"
+        android:visibility="gone"
         >
 
-
     </SurfaceView>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="100dp">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:text="Calling 911... \n press anything to cancel."
+            android:id="@+id/textView911"
+            android:layout_gravity="right|center_vertical" />
+
+    </RelativeLayout>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:id="@+id/progressBar"
+        android:layout_below="@id/textView911"
+        />
+
 
 </LinearLayout>
