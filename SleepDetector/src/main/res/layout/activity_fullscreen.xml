@@ -10,13 +10,13 @@
         android:textColor="#FFFFFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="100"
+        android:text="0"
         android:id="@+id/speedTextView"
         android:layout_gravity="right|bottom"
         android:textSize="90dp"
-        android:gravity="center"
         android:layout_alignBottom="@+id/textView"
-        android:layout_alignRight="@+id/speedUnitTextView" />
+        android:layout_toLeftOf="@+id/speedUnitTextView"
+        android:gravity="center" />
 
     <TextView
         android:textColor="#FFFFFF"
@@ -26,19 +26,20 @@
         android:id="@+id/speedUnitTextView"
         android:layout_gravity="right|bottom"
         android:textSize="24dp"
+        android:layout_marginRight="48dp"
         android:gravity="center"
-        android:layout_below="@+id/speedTextView"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignBottom="@+id/speedTextView"
+        android:layout_toLeftOf="@+id/textView" />
 
     <TextView
         android:textColor="#FFFFFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="45"
+        android:text="25"
         android:id="@+id/speedLimitTextView"
         android:textSize="34dp"
         android:singleLine="false"
-        android:layout_marginRight="27dp"
+        android:layout_marginRight="8dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true" />
 
@@ -50,6 +51,42 @@
         android:text="limit"
         android:id="@+id/textView"
         android:layout_below="@+id/speedLimitTextView"
-        android:layout_alignRight="@+id/speedLimitTextView" />
+        android:layout_alignRight="@+id/speedLimitTextView"
+        android:layout_marginRight="8dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="60sp"
+        android:layout_below="@id/speedUnitTextView"
+        android:id="@+id/relativeLayout">
+
+        <RelativeLayout
+            android:id="@+id/gradientLayout"
+            android:layout_height="60sp"
+            android:layout_width="fill_parent"
+            android:background="@drawable/rpm_bar_gradient">
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/gradientCoverLayout"
+            android:layout_height="60sp"
+            android:layout_width="30dp"
+            android:layout_alignRight="@id/gradientLayout"
+            android:background="#000000">
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:textColor="#FFFFFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="rpm"
+        android:id="@+id/textView2"
+        android:layout_gravity="right|bottom"
+        android:textSize="24dp"
+        android:gravity="center"
+        android:layout_marginLeft="8dp"
+        android:layout_above="@+id/relativeLayout"
+        android:layout_alignParentLeft="true" />
+
 
 </RelativeLayout>

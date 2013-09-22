@@ -1,6 +1,7 @@
 package org.mhacks.sleepdetector;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -98,9 +99,7 @@ public class FullscreenActivity extends Activity {
             if(AccelerometerService.INTENT_WAKE_UP.equals(intent.getAction())) {
                 mBackgroundLayout.setBackgroundColor(getResources().getColor(R.color.red));
                     player.start();
-
             }
-            //
             else if(AccelerometerService.INTENT_WOKE.equals(intent.getAction())) {
                 mBackgroundLayout.setBackgroundColor(getResources().getColor(R.color.black));
                     player.pause();
@@ -113,6 +112,7 @@ public class FullscreenActivity extends Activity {
                     recording = true;
                     startRecording();
                 }
+
             }
             else if(HUDService.INTENT_SPEED_CHANGED.equals(intent.getAction())) {
                 TextView speedView = (TextView)findViewById(R.id.speedTextView);
@@ -120,6 +120,14 @@ public class FullscreenActivity extends Activity {
                 TextView speedLimitTextView = (TextView)findViewById(R.id.speedLimitTextView);
                 speedLimitTextView.setText(Integer.toString(intent.getIntExtra("SpeedLimit", 20)));
             }
+
+            int rand = (int)(Math.random() * 600);
+            int height = findViewById(R.id.gradientCoverLayout).getLayoutParams().height;
+            RelativeLayout.LayoutParams newParams = new RelativeLayout.LayoutParams(rand, height);
+            newParams.addRule(RelativeLayout.ALIGN_RIGHT, R.id.gradientLayout);
+            findViewById(R.id.gradientCoverLayout).setLayoutParams(newParams);
+            TextView speedTextView = (TextView)findViewById(R.id.speedTextView);
+            speedTextView.setText(Integer.toString((600 - rand) / 8));
         }
     }
 

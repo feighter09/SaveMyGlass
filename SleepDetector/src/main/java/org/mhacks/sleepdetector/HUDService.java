@@ -21,6 +21,11 @@ import com.tomtom.lbs.sdk.geolocation.ReverseGeocoder;
 import com.tomtom.lbs.sdk.util.Coordinates;
 import com.tomtom.lbs.sdk.util.SDKContext;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.IOException;
 import java.util.Vector;
 
 /**
@@ -107,10 +112,7 @@ public class HUDService extends Service {
     }
 
     private void updateSpeedLimit(Coordinates coords) {
-        MyGeocodeListener listener = new MyGeocodeListener();
-        ReverseGeocodeOptionalParameters params = new ReverseGeocodeOptionalParameters();
-        params.type = ReverseGeocodeOptionalParameters.REVERSE_TYPE_NATIONAL;
-        ReverseGeocoder.reverseGeocode(coords, params, listener, null);
+        //doesn't work cuz tomtom isn't nearly as cool as I though
     }
 
     public void getLocation() {
@@ -121,7 +123,7 @@ public class HUDService extends Service {
     @Override
     public void onCreate() {
         mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        SDKContext.setDeveloperKey("864stzx5n9senu3tbgb7ttqq");
+        SDKContext.setDeveloperKey("cheed25ehrx9k2uh3wvpzk67");
         getLocation();
     }
 }
