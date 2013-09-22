@@ -84,9 +84,10 @@ public class HUDService extends Service {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (addresses != null && addresses.size() > 0)
+            if (addresses != null && addresses.size() > 0) {
                 Log.d("HUD", "Address grabbed");
-            else
+                String city = addresses.get(0).getLocality();
+            } else
                 getDefaultWeather();
 
 //            List<Address> list = geoCoder.getFromLocation(location
@@ -148,12 +149,17 @@ public class HUDService extends Service {
 
     public void getLocation() {
         mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 200, 0, mlocListener);
-//        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 200, 0, mlocListener);
+        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 200, 0, mlocListener);
     }
 
     public void getDefaultWeather() {
+        getWeather("Ann Arbor");
+    }
+
+    public void getWeather(String city) {
+        city = city.replace(' ', '_');
         DefaultHttpClient httpClient = new DefaultHttpClient();
-        HttpGet httpGet = new HttpGet("http://api.wunderground.com/api/508a609899cd13c9/alerts/q/MI/Ann_Arbor.json\n");
+        HttpGet httpGet = new HttpGet("http://api.wunderground.com/api/508a609899cd13c9/alerts/q/MI/" + city + ".json\n");
 
         HttpResponse httpResponse = null;
         try {
