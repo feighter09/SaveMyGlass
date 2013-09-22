@@ -11,9 +11,9 @@ import android.util.Log;
 
 public class AccelerometerService extends Service implements SensorEventListener {
 
-    public static final float LOW_THRESH = 0.5f;
+    public static final float LOW_THRESH = 0.55f;
     public static final float HIGH_THRESH = 0.8f;
-    public static final float CRASH_GS = 5f;
+    public static final float CRASH_GS = 1.5f;
 
     public static final String INTENT_WAKE_UP = "org.mhacks.sleepdetector.INTENT_WAKE_UP";
     public static final String INTENT_WOKE = "org.mhacks.sleepdetector.INTENT_WOKE";

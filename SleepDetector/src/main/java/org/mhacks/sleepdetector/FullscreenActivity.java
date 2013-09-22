@@ -6,29 +6,42 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.io.IOException;
 
 public class FullscreenActivity extends Activity {
 
     private RelativeLayout mBackgroundLayout;
 
+
+    MediaPlayer player;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getActionBar().hide();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_fullscreen);
 
         Log.d("SleepDetector", "Start");
 
-
+        player = MediaPlayer.create(this, R.raw.beep_9);
 
         TextView tv = (TextView)findViewById(R.id.speedTextView);
 //        HUDService HUD = new HUDService();
@@ -52,33 +65,50 @@ public class FullscreenActivity extends Activity {
         registerReceiver(new EventReceiver(), filter);
     }
 
+    private void startRecording() {
+        startActivityForResult(new Intent(this, RecordActivity.class), 5);
+    }
+
+    private boolean recording = false;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 5)
+            recording = false;
+    }
+
     private class EventReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             // We need to wake the user up
             if(AccelerometerService.INTENT_WAKE_UP.equals(intent.getAction())) {
                 mBackgroundLayout.setBackgroundColor(getResources().getColor(R.color.red));
+                if(!player.isPlaying()) {
+                    player.start();
+                }
             }
             //
             else if(AccelerometerService.INTENT_WOKE.equals(intent.getAction())) {
                 Log.d("FullscreenActivity", "You woke…");
                 mBackgroundLayout.setBackgroundColor(getResources().getColor(R.color.black));
+                if(player.isPlaying()) {
+                    player.pause();
+                }
             }
             else if(AccelerometerService.INTENT_CRASHED.equals(intent.getAction())) {
                 Log.d("FullscreenActivity", "Detected a crash!!!");
-
-
+                if(!recording) {
+                    Intent i = new Intent("com.google.glass.action.MESSAGE");
+                    i.putExtra("MESSAGE", "EMERGENCY!!!");
+                    recording = true;
+                    startRecording();
+                }
             }
             else if(HUDService.INTENT_SPEED_CHANGED.equals(intent.getAction())) {
                 TextView tv = (TextView)findViewById(R.id.speedTextView);
                 tv.setText(Integer.toString(intent.getIntExtra("Speed", 0)));
             }
         }
-    }
-
-    private void dispatchTakeVideoIntent() {
-        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        startActivityForResult(takeVideoIntent, 3);
     }
 
 
