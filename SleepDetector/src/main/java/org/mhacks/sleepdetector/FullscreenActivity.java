@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -56,7 +57,13 @@ public class FullscreenActivity extends Activity {
 
         player = MediaPlayer.create(this, R.raw.beep_9);
 
+        Typeface robotoLight = Typeface.createFromAsset(getAssets(),
+                "Roboto-Light.ttf");
+
         TextView tv = (TextView)findViewById(R.id.speedTextView);
+
+        tv.setTypeface(robotoLight);
+
 //        HUDService HUD = new HUDService();
 //        HUD.setSpeedLimitView(tv);
 //        HUD.getLocation();
