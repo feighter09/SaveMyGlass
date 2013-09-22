@@ -72,7 +72,7 @@ public class AccelerometerService extends Service implements SensorEventListener
 
             SensorManager.getRotationMatrixFromVector(mRotationMatrix,sensorEvent.values);
 
-            Log.d("AccelerometerService", mRotationMatrix[0]+" "+mRotationMatrix[1]+" "+mRotationMatrix[2]);
+//            Log.d("AccelerometerService", mRotationMatrix[0]+" "+mRotationMatrix[1]+" "+mRotationMatrix[2]);
 
 
         }

@@ -33,8 +33,10 @@ public class HUDService extends Service {
     Context ctx;
     MyLocationListener mlocListener = new MyLocationListener();
     LocationManager mlocManager;
-    TextView speedLimitView;
-    Double curSpeed = 0.0;
+    TextView speedView, speedLimitView;
+    Float curSpeed = 0.0f;
+    Location lastLoc;
+    Long lastTime;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -47,17 +49,18 @@ public class HUDService extends Service {
         public void onLocationChanged(Location loc) {
             if (loc == null) return;
 
-            if (loc.hasSpeed()) {
-                String text = "Latitude = " + loc.getLatitude()
-                                + "Longitude = " + loc.getLongitude();
-                Log.d("SleepDetector", text);
+            if (loc.hasSpeed())
+                curSpeed = loc.getSpeed() * 2.23694f;
+            else
+                if (lastLoc != null)
+                    curSpeed = lastLoc.distanceTo(loc) / (loc.getTime() - lastTime);
 
-                curSpeed = loc.getSpeed() * 2.23694;
-                Log.d("SleepDetector", "CurSpeed: " + Double.toString(curSpeed));
-            } else {
-                Log.d("HUD", "Location returned without speed");
-            }
+            lastLoc = loc;
+            lastTime = loc.getTime();
             updateSpeedLimit(new Coordinates(loc.getLatitude(), loc.getLongitude()));
+            Intent intent = new Intent(INTENT_SPEED_CHANGED);
+            intent.putExtra("Speed", curSpeed);
+            sendBroadcast(intent);
         }
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle) {}
@@ -78,16 +81,14 @@ public class HUDService extends Service {
                 Log.d("SleepDetector", result.street);
                 Log.d("SleepDetector", Double.toString((double) result.maxSpeedKph * 0.621371));
                 Log.d("SleepDetector", Double.toString((double)result.averageSpeedKph * 0.621371));
-
-//                speedLimitView.setText(Double.toString((double) result.maxSpeedKph * 0.621371));
-            } else
-                result.maxSpeedKph = (int)(20 / 0.621371);
+                // to do finish this
+            }
 
             Intent intent = new Intent(INTENT_SPEED_CHANGED);
-            int speedLimit = (int)(result.maxSpeedKph * 0.621371);
+            int speedLimit = result.maxSpeedKph;
             intent.putExtra("Speed", curSpeed);
             intent.putExtra("SpeedLimit", speedLimit);
-            sendBroadcast(new Intent(INTENT_SPEED_CHANGED));
+            sendBroadcast(intent);
 
             getLocation();
         }
@@ -95,6 +96,10 @@ public class HUDService extends Service {
 
     public void setSpeedLimitView(TextView speedLimitView) {
         this.speedLimitView = speedLimitView;
+    }
+
+    public void setSpeedView(TextView speedView) {
+        this.speedView = speedView;
     }
 
     public void setCtx(Context ctx) {
@@ -106,17 +111,9 @@ public class HUDService extends Service {
         ReverseGeocodeOptionalParameters params = new ReverseGeocodeOptionalParameters();
         params.type = ReverseGeocodeOptionalParameters.REVERSE_TYPE_NATIONAL;
         ReverseGeocoder.reverseGeocode(coords, params, listener, null);
-        Log.d("HUD", "Updating things");
     }
 
     public void getLocation() {
-        Criteria criteria = new Criteria();
-        criteria.setSpeedRequired(true);
-        String provider = mlocManager.getBestProvider(criteria, true);
-        Log.d("HUD", LocationManager.GPS_PROVIDER);
-        Log.d("HUD", Double.toString(mlocManager.getProvider(provider).getAccuracy()));
-        Log.d("HUD", Double.toString(mlocManager.getProvider(LocationManager.NETWORK_PROVIDER).getAccuracy()));
-//        mlocManager.requestLocationUpdates(provider, 200, 0, mlocListener);
         mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 0, mlocListener);
         mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10, 0, mlocListener);
     }

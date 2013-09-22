@@ -56,17 +56,11 @@ public class FullscreenActivity extends Activity {
 
         player = MediaPlayer.create(this, R.raw.beep_9);
 
-        TextView tv = (TextView)findViewById(R.id.speedTextView);
-//        HUDService HUD = new HUDService();
-//        HUD.setSpeedLimitView(tv);
-//        HUD.getLocation();
-//        HUD.onCreate();
-
         mBackgroundLayout = (RelativeLayout) findViewById(R.id.backgroundLayout);
 
 //        startService(new Intent(this, ProxService.class));
         startService(new Intent(this, HUDService.class));
-//        startService(new Intent(this, AccelerometerService.class));
+        startService(new Intent(this, AccelerometerService.class));
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(AccelerometerService.INTENT_WAKE_UP);
@@ -101,13 +95,11 @@ public class FullscreenActivity extends Activity {
             }
             //
             else if(AccelerometerService.INTENT_WOKE.equals(intent.getAction())) {
-                Log.d("FullscreenActivity", "You woke…");
                 mBackgroundLayout.setBackgroundColor(getResources().getColor(R.color.black));
                     player.pause();
 
             }
             else if(AccelerometerService.INTENT_CRASHED.equals(intent.getAction())) {
-                Log.d("FullscreenActivity", "Detected a crash!!!");
                 if(!recording) {
                     Intent i = new Intent("com.google.glass.action.MESSAGE");
                     i.putExtra("MESSAGE", "EMERGENCY!!!");
@@ -116,8 +108,10 @@ public class FullscreenActivity extends Activity {
                 }
             }
             else if(HUDService.INTENT_SPEED_CHANGED.equals(intent.getAction())) {
-                TextView tv = (TextView)findViewById(R.id.speedTextView);
-                tv.setText(Integer.toString(intent.getIntExtra("Speed", 0)));
+                TextView speedView = (TextView)findViewById(R.id.speedTextView);
+                speedView.setText(Integer.toString((int)intent.getFloatExtra("Speed", 0)));
+                TextView speedLimitTextView = (TextView)findViewById(R.id.speedLimitTextView);
+                speedLimitTextView.setText(Integer.toString(intent.getIntExtra("SpeedLimit", 20)));
             }
         }
     }
