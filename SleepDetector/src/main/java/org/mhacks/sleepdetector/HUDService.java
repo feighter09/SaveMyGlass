@@ -3,7 +3,9 @@ package org.mhacks.sleepdetector;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,11 +23,15 @@ import com.tomtom.lbs.sdk.geolocation.ReverseGeocoder;
 import com.tomtom.lbs.sdk.util.Coordinates;
 import com.tomtom.lbs.sdk.util.SDKContext;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 /**
@@ -70,6 +76,25 @@ public class HUDService extends Service {
             Log.d("HUD", "Lat: " + Double.toString(loc.getLatitude()) + ", long: " + Double.toString(loc.getLongitude()));
             Log.d("HUD", "Speed: " + Float.toString(curSpeed));
             getLocation();
+
+            Geocoder gcd = new Geocoder(getApplicationContext(), Locale.getDefault());
+            List<Address> addresses = null;
+            try {
+                addresses = gcd.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (addresses != null && addresses.size() > 0)
+                Log.d("HUD", "Address grabbed");
+            else
+                getDefaultWeather();
+
+//            List<Address> list = geoCoder.getFromLocation(location
+//                    .getLatitude(), location.getLongitude(), 1);
+//            if (list != null & list.size() > 0) {
+//                Address address = list.get(0);
+//                result = address.getLocality();
+//                return result;
         }
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle) {}
@@ -122,8 +147,28 @@ public class HUDService extends Service {
     }
 
     public void getLocation() {
-        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50, 0, mlocListener);
-        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 50, 0, mlocListener);
+        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 200, 0, mlocListener);
+//        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 200, 0, mlocListener);
+    }
+
+    public void getDefaultWeather() {
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpGet httpGet = new HttpGet("http://api.wunderground.com/api/508a609899cd13c9/alerts/q/MI/Ann_Arbor.json\n");
+
+        HttpResponse httpResponse = null;
+        try {
+            httpResponse = httpClient.execute(httpGet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        HttpEntity httpEntity = httpResponse.getEntity();
+        String output = null;
+        try {
+            output = EntityUtils.toString(httpEntity);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d("HUD", output);
     }
 
     @Override
