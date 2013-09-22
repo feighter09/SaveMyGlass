@@ -58,7 +58,7 @@ public class HUDService extends Service {
                 curSpeed = loc.getSpeed() * 2.23694f;
             else
                 if (lastLoc != null)
-                    curSpeed = lastLoc.distanceTo(loc) / (loc.getTime() - lastTime);
+                    curSpeed = lastLoc.distanceTo(loc) * 223.694f / (loc.getTime() - lastTime) ;
 
             lastLoc = loc;
             lastTime = loc.getTime();
@@ -66,6 +66,10 @@ public class HUDService extends Service {
             Intent intent = new Intent(INTENT_SPEED_CHANGED);
             intent.putExtra("Speed", curSpeed);
             sendBroadcast(intent);
+
+            Log.d("HUD", "Lat: " + Double.toString(loc.getLatitude()) + ", long: " + Double.toString(loc.getLongitude()));
+            Log.d("HUD", "Speed: " + Float.toString(curSpeed));
+            getLocation();
         }
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle) {}
@@ -92,10 +96,12 @@ public class HUDService extends Service {
             Intent intent = new Intent(INTENT_SPEED_CHANGED);
             int speedLimit = result.maxSpeedKph;
             intent.putExtra("Speed", curSpeed);
+            if (speedLimit == 0)
+                speedLimit = 20;
             intent.putExtra("SpeedLimit", speedLimit);
             sendBroadcast(intent);
 
-            getLocation();
+//            getLocation();
         }
     }
 
@@ -116,8 +122,8 @@ public class HUDService extends Service {
     }
 
     public void getLocation() {
-        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 0, mlocListener);
-        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10, 0, mlocListener);
+        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50, 0, mlocListener);
+        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 50, 0, mlocListener);
     }
 
     @Override

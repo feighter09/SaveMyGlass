@@ -110,7 +110,6 @@ public class FullscreenActivity extends Activity {
                     recording = true;
                     startRecording();
                 }
-
             }
             else if(HUDService.INTENT_SPEED_CHANGED.equals(intent.getAction())) {
                 TextView speedView = (TextView)findViewById(R.id.speedTextView);
@@ -124,8 +123,8 @@ public class FullscreenActivity extends Activity {
             RelativeLayout.LayoutParams newParams = new RelativeLayout.LayoutParams(rand, height);
             newParams.addRule(RelativeLayout.ALIGN_RIGHT, R.id.gradientLayout);
             findViewById(R.id.gradientCoverLayout).setLayoutParams(newParams);
-            TextView speedTextView = (TextView)findViewById(R.id.speedTextView);
-            speedTextView.setText(Integer.toString((600 - rand) / 8));
+//            TextView speedTextView = (TextView)findViewById(R.id.speedTextView);
+//            speedTextView.setText(Integer.toString((600 - rand) / 8));
         }
     }
 }
