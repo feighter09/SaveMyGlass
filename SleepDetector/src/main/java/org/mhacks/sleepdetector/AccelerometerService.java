@@ -52,9 +52,9 @@ public class AccelerometerService extends Service implements SensorEventListener
             float y=sensorEvent.values[1];
             float z=sensorEvent.values[2];
 
-            Log.d("Accelerometer", x + " " + y + " "+z);
+           // Log.d("Accelerometer", x + " " + y + " "+z);
 
-            if(Math.abs(z) > 4) {
+            if(Math.abs(z) > 2.5) {
                 mCt++;
             }
             else {

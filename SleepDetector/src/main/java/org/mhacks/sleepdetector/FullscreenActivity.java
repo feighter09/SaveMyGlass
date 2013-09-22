@@ -73,7 +73,7 @@ public class FullscreenActivity extends Activity {
 
 //        startService(new Intent(this, ProxService.class));
         startService(new Intent(this, HUDService.class));
-//        startService(new Intent(this, AccelerometerService.class));
+        startService(new Intent(this, AccelerometerService.class));
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(AccelerometerService.INTENT_WAKE_UP);
