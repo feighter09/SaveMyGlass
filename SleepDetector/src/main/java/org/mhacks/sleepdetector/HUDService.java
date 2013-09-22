@@ -3,9 +3,11 @@ package org.mhacks.sleepdetector;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -26,6 +28,9 @@ import java.util.Vector;
  */
 public class HUDService extends Service {
 
+    public static final String INTENT_SPEED_CHANGED = "org.mhacks.sleepdetector.INTENT_SPEED_CHANGED";
+
+    Context ctx;
     MyLocationListener mlocListener = new MyLocationListener();
     LocationManager mlocManager;
     TextView speedLimitView;
@@ -40,14 +45,18 @@ public class HUDService extends Service {
 
         @Override
         public void onLocationChanged(Location loc) {
-            String text = "My current location is: " + "Latitude = "
-                    + loc.getLatitude() + "Longitude = " + loc.getLongitude();
+            if (loc == null) return;
 
-            Log.d("SleepDetector", "Getting Location...");
-            Log.d("SleepDetector", text);
+            if (loc.hasSpeed()) {
+                String text = "Latitude = " + loc.getLatitude()
+                                + "Longitude = " + loc.getLongitude();
+                Log.d("SleepDetector", text);
 
-            curSpeed = loc.getSpeed() * 2.23694;
-            Log.d("SleepDetector", "CurSpeed: " + Double.toString(curSpeed));
+                curSpeed = loc.getSpeed() * 2.23694;
+                Log.d("SleepDetector", "CurSpeed: " + Double.toString(curSpeed));
+            } else {
+                Log.d("HUD", "Location returned without speed");
+            }
             updateSpeedLimit(new Coordinates(loc.getLatitude(), loc.getLongitude()));
         }
         @Override
@@ -62,14 +71,24 @@ public class HUDService extends Service {
 
         @Override
         public void handleReverseGeocode(Vector<ReverseGeocodeData> data, Object payload) {
+
+            ReverseGeocodeData result = new ReverseGeocodeData();
             if (data != null && data.size()>0 ) {
-                ReverseGeocodeData result = data.elementAt(0);
+                result = data.elementAt(0);
                 Log.d("SleepDetector", result.street);
                 Log.d("SleepDetector", Double.toString((double) result.maxSpeedKph * 0.621371));
                 Log.d("SleepDetector", Double.toString((double)result.averageSpeedKph * 0.621371));
 
-                speedLimitView.setText(Double.toString((double) result.maxSpeedKph * 0.621371));
-            }
+//                speedLimitView.setText(Double.toString((double) result.maxSpeedKph * 0.621371));
+            } else
+                result.maxSpeedKph = (int)(20 / 0.621371);
+
+            Intent intent = new Intent(INTENT_SPEED_CHANGED);
+            int speedLimit = (int)(result.maxSpeedKph * 0.621371);
+            intent.putExtra("Speed", curSpeed);
+            intent.putExtra("SpeedLimit", speedLimit);
+            sendBroadcast(new Intent(INTENT_SPEED_CHANGED));
+
             getLocation();
         }
     }
@@ -78,16 +97,28 @@ public class HUDService extends Service {
         this.speedLimitView = speedLimitView;
     }
 
+    public void setCtx(Context ctx) {
+        this.ctx = ctx;
+    }
+
     private void updateSpeedLimit(Coordinates coords) {
         MyGeocodeListener listener = new MyGeocodeListener();
         ReverseGeocodeOptionalParameters params = new ReverseGeocodeOptionalParameters();
-        params.type = ReverseGeocodeOptionalParameters.REVERSE_TYPE_ALL;
+        params.type = ReverseGeocodeOptionalParameters.REVERSE_TYPE_NATIONAL;
         ReverseGeocoder.reverseGeocode(coords, params, listener, null);
+        Log.d("HUD", "Updating things");
     }
 
     public void getLocation() {
-        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
-        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mlocListener);
+        Criteria criteria = new Criteria();
+        criteria.setSpeedRequired(true);
+        String provider = mlocManager.getBestProvider(criteria, true);
+        Log.d("HUD", LocationManager.GPS_PROVIDER);
+        Log.d("HUD", Double.toString(mlocManager.getProvider(provider).getAccuracy()));
+        Log.d("HUD", Double.toString(mlocManager.getProvider(LocationManager.NETWORK_PROVIDER).getAccuracy()));
+//        mlocManager.requestLocationUpdates(provider, 200, 0, mlocListener);
+        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 0, mlocListener);
+        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10, 0, mlocListener);
     }
 
     @Override
@@ -96,6 +127,4 @@ public class HUDService extends Service {
         SDKContext.setDeveloperKey("864stzx5n9senu3tbgb7ttqq");
         getLocation();
     }
-
-
 }

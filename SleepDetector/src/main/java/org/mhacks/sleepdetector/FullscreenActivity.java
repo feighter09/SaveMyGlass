@@ -31,21 +31,22 @@ public class FullscreenActivity extends Activity {
 
 
         TextView tv = (TextView)findViewById(R.id.speedTextView);
-        tv.setText("45");
-        HUDService HUD = new HUDService();
-        HUD.setSpeedLimitView(tv);
+//        HUDService HUD = new HUDService();
+//        HUD.setSpeedLimitView(tv);
+//        HUD.getLocation();
+//        HUD.onCreate();
 
         mBackgroundLayout = (RelativeLayout) findViewById(R.id.backgroundLayout);
 
 //        startService(new Intent(this, ProxService.class));
         startService(new Intent(this, HUDService.class));
-//        startService(new Intent(this, HUDService.class));
-        startService(new Intent(this, AccelerometerService.class));
+//        startService(new Intent(this, AccelerometerService.class));
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(AccelerometerService.INTENT_WAKE_UP);
         filter.addAction(AccelerometerService.INTENT_WOKE);
         filter.addAction(AccelerometerService.INTENT_CRASHED);
+        filter.addAction(HUDService.INTENT_SPEED_CHANGED);
         filter.addAction(DonReceiver.INTENT_DON);
         filter.addAction(DonReceiver.INTENT_UNDON);
         registerReceiver(new EventReceiver(), filter);
@@ -68,8 +69,10 @@ public class FullscreenActivity extends Activity {
 
 
             }
-
-
+            else if(HUDService.INTENT_SPEED_CHANGED.equals(intent.getAction())) {
+                TextView tv = (TextView)findViewById(R.id.speedTextView);
+                tv.setText(Integer.toString(intent.getIntExtra("Speed", 0)));
+            }
         }
     }
 
