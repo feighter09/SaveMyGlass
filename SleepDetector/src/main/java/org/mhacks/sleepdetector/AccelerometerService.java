@@ -29,7 +29,7 @@ public class AccelerometerService extends Service implements SensorEventListener
     @Override
     public void onCreate() {
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mAccel = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         mSensorManager.registerListener(this, mRotation, SensorManager.SENSOR_DELAY_FASTEST);
         mSensorManager.registerListener(this, mAccel, SensorManager.SENSOR_DELAY_FASTEST);
@@ -41,25 +41,40 @@ public class AccelerometerService extends Service implements SensorEventListener
     }
 
     private int mCt;
+    private float[] mRotationMatrix=new float[16];
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        if(sensorEvent.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
-        if(sensorEvent.values[0] > HIGH_THRESH) {
-            mCt++;
-        }
-        else if(sensorEvent.values[0] < LOW_THRESH) {
-            mCt++;
-        }
-        else {
-            if(mCt > 250) {
-                sendBroadcast(new Intent(INTENT_WOKE));
+        if(sensorEvent.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
+
+            // assign directions
+            float x=sensorEvent.values[0];
+            float y=sensorEvent.values[1];
+            float z=sensorEvent.values[2];
+
+            Log.d("Accelerometer", x + " " + y + " "+z);
+
+            if(Math.abs(z) > 4) {
+                mCt++;
             }
-            mCt = 0;
+            else {
+                if(mCt > 250) {
+                    sendBroadcast(new Intent(INTENT_WOKE));
+                }
+                mCt = 0;
+            }
+            if(mCt > 250) {
+                sendBroadcast(new Intent(INTENT_WAKE_UP));
+            }
         }
-        if(mCt > 250) {
-            sendBroadcast(new Intent(INTENT_WAKE_UP));
-        }
+
+        if(sensorEvent.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
+
+            SensorManager.getRotationMatrixFromVector(mRotationMatrix,sensorEvent.values);
+
+            Log.d("AccelerometerService", mRotationMatrix[0]+" "+mRotationMatrix[1]+" "+mRotationMatrix[2]);
+
+
         }
         else if(sensorEvent.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
             float absAccelerationG = 0;
@@ -68,7 +83,6 @@ public class AccelerometerService extends Service implements SensorEventListener
             }
             absAccelerationG = ((float) Math.sqrt(absAccelerationG));
             absAccelerationG /= 9.81;
-            Log.d("AccelerometerService", ""+absAccelerationG);
             if(absAccelerationG > CRASH_GS) {
                 sendBroadcast(new Intent(INTENT_CRASHED));
             }
