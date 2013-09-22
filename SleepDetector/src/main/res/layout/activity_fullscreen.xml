@@ -14,9 +14,9 @@
         android:id="@+id/speedTextView"
         android:layout_gravity="right|bottom"
         android:textSize="90dp"
+        android:gravity="center"
         android:layout_alignBottom="@+id/textView"
-        android:layout_toLeftOf="@+id/speedUnitTextView"
-        android:gravity="center" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:textColor="#FFFFFF"
@@ -26,10 +26,10 @@
         android:id="@+id/speedUnitTextView"
         android:layout_gravity="right|bottom"
         android:textSize="24dp"
-        android:layout_marginRight="48dp"
         android:gravity="center"
+        android:layout_marginLeft="14dp"
         android:layout_alignBottom="@+id/speedTextView"
-        android:layout_toLeftOf="@+id/textView" />
+        android:layout_toRightOf="@+id/speedTextView" />
 
     <TextView
         android:textColor="#FFFFFF"
@@ -39,9 +39,9 @@
         android:id="@+id/speedLimitTextView"
         android:textSize="34dp"
         android:singleLine="false"
-        android:layout_marginRight="8dp"
         android:layout_centerVertical="true"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp" />
 
     <TextView
         android:textColor="#FFFFFF"
@@ -51,41 +51,51 @@
         android:text="limit"
         android:id="@+id/textView"
         android:layout_below="@+id/speedLimitTextView"
-        android:layout_alignRight="@+id/speedLimitTextView"
-        android:layout_marginRight="8dp" />
+        android:layout_alignRight="@+id/speedLimitTextView" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="60sp"
-        android:layout_below="@id/speedUnitTextView"
-        android:id="@+id/relativeLayout">
+        android:id="@+id/relativeLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true">
 
         <RelativeLayout
             android:id="@+id/gradientLayout"
-            android:layout_height="60sp"
+            android:layout_height="20dp"
             android:layout_width="fill_parent"
+            android:layout_alignParentBottom="true"
             android:background="@drawable/rpm_bar_gradient">
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/gradientCoverLayout"
-            android:layout_height="60sp"
+            android:layout_height="20dp"
             android:layout_width="30dp"
             android:layout_alignRight="@id/gradientLayout"
+            android:layout_alignParentBottom="true"
             android:background="#000000">
         </RelativeLayout>
+
+        <TextView
+            android:textColor="#FFFFFF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="revs"
+            android:id="@+id/textView2"
+            android:layout_gravity="right|bottom"
+            android:textSize="24dp"
+            android:gravity="center"
+            android:layout_marginLeft="14dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true" />
     </RelativeLayout>
 
-    <TextView
-        android:textColor="#FFFFFF"
+    <ImageView
+        android:src="@drawable/ic_partly_cloudy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="rpm"
-        android:id="@+id/textView2"
-        android:layout_gravity="right|bottom"
-        android:textSize="24dp"
-        android:gravity="center"
-        android:layout_marginLeft="8dp"
-        android:layout_above="@+id/relativeLayout"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true" />
 
 

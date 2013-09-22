@@ -50,11 +50,7 @@ public class RecordActivity extends Activity implements SurfaceHolder.Callback {
                         e.printStackTrace();
                     }
                 }
-
-                String num = "tel:18001234567";
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse(num));
-                startActivity(intent);
+                finish();
             }
         }.start();
     }
